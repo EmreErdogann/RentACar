@@ -17,7 +17,7 @@ namespace Persistence.EntityConfigurations
             builder.Property(b => b.DeletedDate).HasColumnName("DeletedDate");
 
             builder.HasIndex(indexExpression: b => b.Name, name: "UK_Brands_Name").IsUnique();
-
+            builder.HasMany(x => x.Models);
 
             builder.HasQueryFilter(b => !b.DeletedDate.HasValue);
         }
