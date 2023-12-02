@@ -11,7 +11,7 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
         public Guid BrandId { get; set; }
-        public Guid FueldId { get; set; }
+        public Guid FuelId { get; set; }
         public Guid TransmissionId { get; set; }
         public decimal DailyPrice { get; set; }
         public string ImageUrl { get; set; }
@@ -34,7 +34,7 @@ namespace Domain.Entities
         {
             Id = id;
             BrandId = brandId;
-            FueldId = fueldId;
+            FuelId = fueldId;
             TransmissionId = transmissionId;
             Name = name;
             DailyPrice = dailyPrice;

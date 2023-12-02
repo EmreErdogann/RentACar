@@ -112,7 +112,7 @@ namespace Persistence.Migrations
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("BranId");
+                        .HasColumnName("BrandId");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
@@ -126,12 +126,9 @@ namespace Persistence.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletedDate");
 
-                    b.Property<Guid?>("FuelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FueldId")
+                    b.Property<Guid>("FuelId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnName("FueldId");
+                        .HasColumnName("FuelId");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -250,7 +247,9 @@ namespace Persistence.Migrations
 
                     b.HasOne("Fuel", "Fuel")
                         .WithMany("Models")
-                        .HasForeignKey("FuelId");
+                        .HasForeignKey("FuelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Transmission", "Transmission")
                         .WithMany("Models")

@@ -62,12 +62,11 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BranId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FueldId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FuelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TransmissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DailyPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FuelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -76,8 +75,8 @@ namespace Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Models", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Models_Brands_BranId",
-                        column: x => x.BranId,
+                        name: "FK_Models_Brands_BrandId",
+                        column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -85,7 +84,8 @@ namespace Persistence.Migrations
                         name: "FK_Models_Fuels_FuelId",
                         column: x => x.FuelId,
                         principalTable: "Fuels",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Models_Transmissions_TransmissionId",
                         column: x => x.TransmissionId,
@@ -138,9 +138,9 @@ namespace Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Models_BranId",
+                name: "IX_Models_BrandId",
                 table: "Models",
-                column: "BranId");
+                column: "BrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Models_FuelId",
