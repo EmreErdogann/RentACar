@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Core.Application.Rules;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Application
@@ -9,6 +10,8 @@ namespace Application
         {
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
 
             services.AddMediatR(configuration =>
             {
