@@ -1,6 +1,7 @@
 ﻿using Application.Features.Brands.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Transaction;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -9,39 +10,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Brands.Commands.Create
+namespace Application.Features.Brands.Commands.Create;
+
+public class CreateBrandCommand : IRequest<CreatedBrandResponse>
 {
-    public class CreateBrandCommand : IRequest<CreatedBrandResponse>
+    public string Name { get; set; }
+
+
+    public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreatedBrandResponse>, ITransactionalRequest
     {
-        public string Name { get; set; }
 
+        private readonly IBrandRepository _brandRepository;
+        private readonly IMapper _mapper;
+        private readonly BrandBusinessRules _brandBusinessRules;
 
-        public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreatedBrandResponse>
+        public CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules)
         {
+            _brandRepository = brandRepository;
+            _mapper = mapper;
+            _brandBusinessRules = brandBusinessRules;
+        }
 
-            private readonly IBrandRepository _brandRepository;
-            private readonly IMapper _mapper;
-            private readonly BrandBusinessRules _brandBusinessRules;
+        public async Task<CreatedBrandResponse>? Handle(CreateBrandCommand request, CancellationToken cancellationToken)
+        {
+            await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenInserted(request.Name);
 
-            public CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper, BrandBusinessRules brandBusinessRules)
-            {
-                _brandRepository = brandRepository;
-                _mapper = mapper;
-                _brandBusinessRules = brandBusinessRules;
-            }
+            Brand brand = _mapper.Map<Brand>(request);
+            brand.Id = Guid.NewGuid();
 
-            public async Task<CreatedBrandResponse>? Handle(CreateBrandCommand request, CancellationToken cancellationToken)
-            {
-                await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenInserted(request.Name);
+            var result = await _brandRepository.AddAsync(brand);
+            
 
-                Brand brand = _mapper.Map<Brand>(request);
-                brand.Id = Guid.NewGuid();
-
-                var result = await _brandRepository.AddAsync(brand);
-
-                CreatedBrandResponse createdBrandResponse = _mapper.Map<CreatedBrandResponse>(result);
-                return createdBrandResponse;
-            }
+            CreatedBrandResponse createdBrandResponse = _mapper.Map<CreatedBrandResponse>(result);
+            return createdBrandResponse;
         }
     }
 }

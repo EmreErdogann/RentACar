@@ -1,6 +1,9 @@
 ﻿using Core.Application.Rules;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using FluentValidation;
+using Core.Application.Pipelines.Validaton;
+using Core.Application.Pipelines.Transaction;
 
 namespace Application
 {
@@ -13,10 +16,17 @@ namespace Application
 
             services.AddSubClassesOfType(Assembly.GetExecutingAssembly(), typeof(BaseBusinessRules));
 
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             services.AddMediatR(configuration =>
             {
                 configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+
+                configuration.AddOpenBehavior(typeof(RequestValidatonBehavior<,>));
+                configuration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
+
             });
+
 
             return services;
         }
