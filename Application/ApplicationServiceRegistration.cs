@@ -4,6 +4,7 @@ using System.Reflection;
 using FluentValidation;
 using Core.Application.Pipelines.Validaton;
 using Core.Application.Pipelines.Transaction;
+using Core.Application.Pipelines.Caching;
 
 namespace Application
 {
@@ -24,6 +25,7 @@ namespace Application
 
                 configuration.AddOpenBehavior(typeof(RequestValidatonBehavior<,>));
                 configuration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
+                configuration.AddOpenBehavior(typeof(CachingBehavior<,>));
 
             });
 
