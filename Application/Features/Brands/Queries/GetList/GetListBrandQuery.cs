@@ -24,6 +24,8 @@ namespace Application.Features.Brands.Queries.GetList
 
         public TimeSpan? SlidingExpiration { get; }
 
+        public string? CacheGroupKey => "GetBrands";
+
         public class GetListBrandQueryHandler : IRequestHandler<GetListBrandQuery, GetListResponse<GetListBrandListItemDto>>
         {
             private readonly IBrandRepository _brandRepository;
@@ -41,7 +43,8 @@ namespace Application.Features.Brands.Queries.GetList
                     index: request.PageRequest.PageIndex,
                     size: request.PageRequest.PageSize,
                     cancellationToken: cancellationToken,
-                    withDeleted: true
+                    withDeleted: true,
+                    orderBy: m=> m.OrderBy(x=> x.CreatedDate)
                     );
 
                 GetListResponse<GetListBrandListItemDto> response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);

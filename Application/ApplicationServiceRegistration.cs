@@ -26,6 +26,7 @@ namespace Application
                 configuration.AddOpenBehavior(typeof(RequestValidatonBehavior<,>));
                 configuration.AddOpenBehavior(typeof(TransactionScopeBehavior<,>));
                 configuration.AddOpenBehavior(typeof(CachingBehavior<,>));
+                configuration.AddOpenBehavior(typeof(CacheRemovingBehavior<,>));
 
             });
 
